@@ -43,3 +43,5 @@
 13. requirements のkeyで、マイ設定にあるもの(mynumber_card, aeon_card, biccamera_card, yodobashi_member)は自動判定、それ以外は「要確認」として表示する。
 
 14. 応募条件の表示は requirements に一本化した(conditions は廃止)。データを変更すると GitHub Actions が scripts/validate.py で自動検証する。失敗したら直してから公開する。
+
+15. 競合サイトの記載は、チェーンごとの固定的な情報に限り、自分の言葉で要約して hint に保持してよい。verified は false のままにし、公式で確認してから条件に使う。個別の抽選一覧、本文の転載、競合が独自に集計した当選率の数値は取り込まない。
