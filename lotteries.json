@@ -1,0 +1,22 @@
+[
+  {
+    "id": "sample-001",
+    "shop_id": "example-shop-1",
+    "product": "(サンプル)拡張パック BOX",
+    "method": "online",
+    "entry_start": "2026-10-15T12:00:00+09:00",
+    "entry_end": "2026-10-17T23:59:00+09:00",
+    "result_date": "2026-10-19T18:00:00+09:00",
+    "purchase_period": null,
+    "price_yen": null,
+    "limit_per_person": 1,
+    "conditions": { "membership": true, "app": false, "id_verification": false, "receipt": false, "note": null },
+    "status": "upcoming",
+    "source_type": "x",
+    "source_url": "https://example.com/sample",
+    "first_seen_at": "2026-10-14T09:00:00+09:00",
+    "last_verified_at": null,
+    "confidence": 1.0,
+    "review_needed": true
+  }
+]

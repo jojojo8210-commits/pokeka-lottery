@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lottery",
+  "description": "抽選・予約情報1件分のデータ形式",
+  "type": "object",
+  "required": ["id", "shop_id", "product", "method", "status", "source_url", "first_seen_at", "confidence", "review_needed"],
+  "properties": {
+    "id": { "type": "string", "description": "shop_id-商品-受付開始日 などで作る一意なID" },
+    "shop_id": { "type": "string", "description": "data/shops.yaml の id" },
+    "product": { "type": "string", "description": "商品名(例: 拡張パック○○ BOX)" },
+    "method": { "type": "string", "enum": ["online", "store", "unknown"], "description": "オンライン抽選か店頭抽選か" },
+    "entry_start": { "type": ["string", "null"], "format": "date-time", "description": "受付開始(日本時間)" },
+    "entry_end": { "type": ["string", "null"], "format": "date-time", "description": "受付終了(日本時間)。不明ならnullにしてreview_needed=true" },
+    "result_date": { "type": ["string", "null"], "format": "date-time", "description": "当選発表日" },
+    "purchase_period": { "type": ["string", "null"], "description": "購入・受取できる期間(文章のままでよい)" },
+    "price_yen": { "type": ["integer", "null"], "description": "販売価格(税込)" },
+    "limit_per_person": { "type": ["integer", "null"], "description": "1人あたりの購入上限" },
+    "conditions": {
+      "type": "object",
+      "description": "応募条件",
+      "properties": {
+        "membership": { "type": "boolean", "description": "会員登録が必要" },
+        "app": { "type": "boolean", "description": "専用アプリが必要" },
+        "id_verification": { "type": "boolean", "description": "本人確認が必要" },
+        "receipt": { "type": "boolean", "description": "レシートや購入実績が必要" },
+        "note": { "type": ["string", "null"], "description": "その他の条件" }
+      }
+    },
+    "status": { "type": "string", "enum": ["upcoming", "open", "closed", "unknown"] },
+    "source_type": { "type": "string", "enum": ["x", "site", "rss", "user_report"] },
+    "source_url": { "type": "string", "description": "告知の元URL(Xの投稿URLなど)" },
+    "first_seen_at": { "type": "string", "format": "date-time", "description": "最初に見つけた日時" },
+    "last_verified_at": { "type": ["string", "null"], "format": "date-time", "description": "最後に内容を確認した日時" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "AIの自信度(0〜1)" },
+    "review_needed": { "type": "boolean", "description": "人間の確認が必要か" }
+  }
+}

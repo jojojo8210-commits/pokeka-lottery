@@ -1,0 +1,21 @@
+# 収集対象の店舗リスト(最大50件)
+# 選ぶ基準: 「頻繁にXで告知する店舗」または「Xでのみ告知する店舗」
+# 以下はひな形です。実在のアカウント名を自分で調べて書き換えてください。
+
+shops:
+  - id: example-shop-1          # 半角英数とハイフンの一意なID
+    name: 例)○○カードショップ△△店
+    x_handle: EXAMPLE_HANDLE_1  # @なしのXアカウント名
+    prefecture: 東京都
+    area: 秋葉原
+    priority: high              # high=1日2回 / normal=1日1回
+    other_sources: []           # 公式サイトやRSSがあればURLを入れる
+    note: Xのみで告知
+  - id: example-shop-2
+    name: 例)□□書店◇◇店
+    x_handle: EXAMPLE_HANDLE_2
+    prefecture: 大阪府
+    area: 梅田
+    priority: normal
+    other_sources: []
+    note: ""
