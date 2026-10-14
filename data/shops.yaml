@@ -39,6 +39,7 @@ shops:
     x_handle: EXAMPLE_HANDLE_YODO
     store_type: chain
     chain_id: yodobashi
+    # 確認
     prefecture: 全国
     area: オンライン
     priority: normal
