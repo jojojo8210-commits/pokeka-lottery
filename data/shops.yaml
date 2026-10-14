@@ -1,21 +1,46 @@
-# 収集対象の店舗リスト(最大50件)
-# 選ぶ基準: 「頻繁にXで告知する店舗」または「Xでのみ告知する店舗」
-# 以下はひな形です。実在のアカウント名を自分で調べて書き換えてください。
+# 収集対象の店舗リスト(最大50件)。実在のXアカウント名はあなたが調べて書き込む
+# 選ぶ基準: 頻繁にXで告知する店舗、またはXでのみ告知する店舗
+# store_type: chain(chains.yamlにあるチェーン) / local_shop(個店) / maker_campaign(メーカー・企業キャンペーン)
+# 以下の example-* はサンプル用。本番の店舗を入れるときに置き換える
 
 shops:
-  - id: example-shop-1          # 半角英数とハイフンの一意なID
+  - id: example-shop-1
     name: 例)○○カードショップ△△店
-    x_handle: EXAMPLE_HANDLE_1  # @なしのXアカウント名
+    x_handle: EXAMPLE_HANDLE_1
+    store_type: local_shop
+    chain_id: null
     prefecture: 東京都
     area: 秋葉原
     priority: high              # high=1日2回 / normal=1日1回
-    other_sources: []           # 公式サイトやRSSがあればURLを入れる
+    other_sources: []
     note: Xのみで告知
-  - id: example-shop-2
-    name: 例)□□書店◇◇店
-    x_handle: EXAMPLE_HANDLE_2
+  - id: example-aeon
+    name: 例)イオンスタイルオンライン
+    x_handle: EXAMPLE_HANDLE_AEON
+    store_type: chain
+    chain_id: aeon
+    prefecture: 全国
+    area: オンライン
+    priority: normal
+    other_sources: []
+    note: ""
+  - id: example-bic
+    name: 例)ビックカメラ○○店
+    x_handle: EXAMPLE_HANDLE_BIC
+    store_type: chain
+    chain_id: biccamera
     prefecture: 大阪府
     area: 梅田
+    priority: normal
+    other_sources: []
+    note: ""
+  - id: example-yodo
+    name: 例)ヨドバシ・ドット・コム
+    x_handle: EXAMPLE_HANDLE_YODO
+    store_type: chain
+    chain_id: yodobashi
+    prefecture: 全国
+    area: オンライン
     priority: normal
     other_sources: []
     note: ""

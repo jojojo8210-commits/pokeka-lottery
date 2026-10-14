@@ -1,0 +1,80 @@
+# チェーン別プロフィール(店舗の固定情報)。
+# 応募条件は抽選ごとに変わるため、ここは「経路ごとの既定値」と「過去の実例(known_variants)」だけを持つ。
+# 抽選データ(lotteries.json)の値が常に優先される。
+# verified: true=公式規約・店頭ポスター等の一次情報で確認済み / partial=一部のみ / false=要確認(登録前に公式で確認する)
+# 注意: 他サイトの記述の転記はしない。条件は一次情報で確認してから書く。
+
+chains:
+  - id: aeon
+    name: イオン
+    verified: partial
+    note: 応募経路ごとに受取方法と条件が異なるので、経路単位で登録する
+    routes:
+      - id: aeon-style-online
+        name: イオンスタイルオンライン(エントリー販売)
+        delivery: mail
+        verified: true
+        source: イオンスタイルオンライン トレーディングカードゲーム事前エントリー申込規約(提供された画像)
+        rules:
+          payment: { restriction: own_card_only, required_card: イオンカード(注文者と同一名義), note: デビット・プリペイドは不可と記載 }
+          entry_limit: 1商品につき1人(1世帯・同一住所)1回
+          duplicate_entry: 複数アカウント・メール・電話番号での重複応募は全て無効
+          announce: { channel: email, subject: 【イオンスタイルオンライン】エントリー商品当選のおしらせ, no_inquiry: true, mail_domain: aeonretail.com }
+          transfer: 当選の権利は譲渡不可
+          cancel_return: 注文後のキャンセル・返品・交換は不可(初期不良の交換不可も記載あり)
+          address: 届け先の不備は事前通告なくキャンセル。注文後の住所変更は不可
+          ship_area: 日本国内のみ
+      - { id: kids-republic-app, name: キッズリパブリックアプリ, delivery: store, verified: false, note: 店舗受取。対象地域あり(要確認) }
+      - { id: aeon-hokkaido-eshop, name: イオン北海道eショップ, verified: false }
+      - { id: iaeon-app, name: iAEONアプリ, delivery: store, verified: false, note: 店頭でアプリ画面の提示が必要(要確認) }
+
+  - id: biccamera
+    name: ビックカメラ
+    verified: partial
+    note: 店舗・抽選ごとに条件が変わる。既定値は持たず、実例をknown_variantsに残して差分を見られるようにする
+    known_variants:
+      - label: 池袋本店 ストームエメラルダ(2026-07)
+        verified: true
+        source: 店頭ポスター(提供された画像)
+        method: 店頭の指定レジで受付
+        accepted_cards: [ビックカメラポイントカード, ビックカメラSuicaカード, ビックカメラJ-WESTカード, ビックカメラJQ SUGOCAカード, ビックカメラ公式アプリ]
+        excluded_cards: [コジマのカード, ソフマップのカード]
+        card_issue_cutoff: 2026-07-12までに発行・お客様情報登録済み
+        purchase_history: 2024-07-12〜2026-07-12の間に1回以上
+        id_verification: 本人名義のマイナンバーカード(電子証明書・通知カードは不可)
+        exclusive: 同時実施の複数店舗のうち応募できるのは1店舗のみ
+        proof: レシートが抽選の控えと当選引換券を兼ねる(再発行不可)
+        announce: 店頭掲示と店舗公式X
+        purchase_window: 当選発表の翌日から3日間
+        shrink: シュリンクと外箱を回収
+        may_close_early: true
+        note: 拡張パックとスターターセットは別々の抽選で、それぞれ応募できる。価格欄は画像が読み取りにくく未登録
+      - label: 4店舗(ラゾーナ川崎ほか) 30th CELEBRATION(2026-10-12〜13)
+        verified: false
+        source: SNS上の第三者の投稿(提供された画像)。公式で要確認
+        accepted_cards: ビックカメラSuicaカード会員のみ(仮カードは不可)
+        purchase_history: あり(詳細は要確認)
+        id_verification: 受取時にマイナンバーカード等
+        note: 受付開始時間が店舗により異なる(10時または13時)
+
+  - id: yodobashi
+    name: ヨドバシ
+    verified: false
+    source: 提供された画像(公式で要確認)
+    delivery: mail
+    shrink: kept
+    defaults:
+      requirements: [ヨドバシ・ドット・コム会員(入会無料), 過去2年の購入履歴(ヨドバシ.comまたはポイント共通化済みの店舗購入。無料商品のみは除く)]
+      win_rate_ref: { text: 約16.9%, note: 参考値。店舗の公表値ではない }
+
+  # 以下は枠だけ。公式の規約・告知を確認してから条件を書く
+  - { id: pokemoncenter-online, name: ポケモンセンターオンライン, verified: false }
+  - { id: pokemon-card-lounge, name: ポケカラウンジ, verified: false }
+  - { id: yamada, name: ヤマダデンキ, verified: false }
+  - { id: toysrus, name: トイザらス, verified: false }
+  - { id: geo, name: ゲオ, verified: false }
+  - { id: joshin, name: ジョーシン, verified: false }
+  - { id: itoyokado, name: イトーヨーカドー, verified: false }
+  - { id: furuichi, name: ふるいち(古本市場), verified: false }
+  - { id: famima-online, name: ファミマオンライン, verified: false }
+  - { id: amazon, name: Amazon, verified: false, note: 招待リクエスト形式(受付期間が固定されない) }

@@ -1,37 +1,357 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Lottery",
-  "description": "抽選・予約情報1件分のデータ形式",
+  "title": "Lottery v2",
+  "description": "抽選・予約情報1件分。応募条件は抽選ごとに変わるため、chains.yamlの既定値よりこのデータの値を常に優先する",
   "type": "object",
-  "required": ["id", "shop_id", "product", "method", "status", "source_url", "first_seen_at", "confidence", "review_needed"],
+  "required": [
+    "id",
+    "shop_id",
+    "product",
+    "method",
+    "status",
+    "source_url",
+    "first_seen_at",
+    "confidence",
+    "review_needed"
+  ],
   "properties": {
-    "id": { "type": "string", "description": "shop_id-商品-受付開始日 などで作る一意なID" },
-    "shop_id": { "type": "string", "description": "data/shops.yaml の id" },
-    "product": { "type": "string", "description": "商品名(例: 拡張パック○○ BOX)" },
-    "method": { "type": "string", "enum": ["online", "store", "unknown"], "description": "オンライン抽選か店頭抽選か" },
-    "entry_start": { "type": ["string", "null"], "format": "date-time", "description": "受付開始(日本時間)" },
-    "entry_end": { "type": ["string", "null"], "format": "date-time", "description": "受付終了(日本時間)。不明ならnullにしてreview_needed=true" },
-    "result_date": { "type": ["string", "null"], "format": "date-time", "description": "当選発表日" },
-    "purchase_period": { "type": ["string", "null"], "description": "購入・受取できる期間(文章のままでよい)" },
-    "price_yen": { "type": ["integer", "null"], "description": "販売価格(税込)" },
-    "limit_per_person": { "type": ["integer", "null"], "description": "1人あたりの購入上限" },
-    "conditions": {
+    "id": {
+      "type": "string"
+    },
+    "shop_id": {
+      "type": "string",
+      "description": "shops.yamlのid"
+    },
+    "shop_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "chain_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "chains.yamlのid。個店はnull"
+    },
+    "route_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "応募経路(例: aeon-style-online)"
+    },
+    "store_type": {
+      "type": "string",
+      "enum": [
+        "chain",
+        "local_shop",
+        "maker_campaign"
+      ]
+    },
+    "product": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "online",
+        "store",
+        "unknown"
+      ]
+    },
+    "entry_channel": {
+      "type": "string",
+      "enum": [
+        "web_form",
+        "x_repost",
+        "app",
+        "in_store",
+        "invitation",
+        "receipt_upload",
+        "unknown"
+      ]
+    },
+    "window_type": {
+      "type": "string",
+      "enum": [
+        "fixed",
+        "rolling"
+      ],
+      "description": "rollingは受付期間が固定されない形式(招待リクエスト等)"
+    },
+    "entry_start": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "entry_end": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "不明ならnullにしreview_needed=true"
+    },
+    "result_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "announce": {
       "type": "object",
-      "description": "応募条件",
       "properties": {
-        "membership": { "type": "boolean", "description": "会員登録が必要" },
-        "app": { "type": "boolean", "description": "専用アプリが必要" },
-        "id_verification": { "type": "boolean", "description": "本人確認が必要" },
-        "receipt": { "type": "boolean", "description": "レシートや購入実績が必要" },
-        "note": { "type": ["string", "null"], "description": "その他の条件" }
+        "channel": {
+          "type": "string",
+          "enum": [
+            "email",
+            "dm",
+            "poster",
+            "app",
+            "x_post",
+            "unknown"
+          ]
+        },
+        "no_inquiry": {
+          "type": "boolean",
+          "description": "当落の問い合わせ不可"
+        }
       }
     },
-    "status": { "type": "string", "enum": ["upcoming", "open", "closed", "unknown"] },
-    "source_type": { "type": "string", "enum": ["x", "site", "rss", "user_report"] },
-    "source_url": { "type": "string", "description": "告知の元URL(Xの投稿URLなど)" },
-    "first_seen_at": { "type": "string", "format": "date-time", "description": "最初に見つけた日時" },
-    "last_verified_at": { "type": ["string", "null"], "format": "date-time", "description": "最後に内容を確認した日時" },
-    "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "AIの自信度(0〜1)" },
-    "review_needed": { "type": "boolean", "description": "人間の確認が必要か" }
+    "purchase_start": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "purchase_end": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "delivery": {
+      "type": "string",
+      "enum": [
+        "store",
+        "mail",
+        "choice",
+        "unknown"
+      ]
+    },
+    "shrink": {
+      "type": "string",
+      "enum": [
+        "kept",
+        "removed",
+        "unknown"
+      ],
+      "description": "removedはシュリンク・外箱を店舗が回収"
+    },
+    "purchase_period": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "price_yen": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "limit_per_person": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "entry_steps": {
+      "type": "array",
+      "description": "応募の手順(Xリポスト系など)",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "label"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "follow",
+              "repost",
+              "quote_repost",
+              "like",
+              "hashtag",
+              "app_install",
+              "member_register",
+              "form_submit",
+              "receipt_upload",
+              "in_store_visit"
+            ]
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "description": "応募前に必要なもの(会員・カード・本人確認・購入履歴など)。一覧の条件表示はここから作る。keyがindex.htmlのマイ設定にあるものは自動判定、無いものは要確認表示。例: member, app, id_check, receipt, purchase_history, mynumber_card, aeon_card, biccamera_card, yodobashi_member",
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "label"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "例: mynumber_card, aeon_card, biccamera_card, yodobashi_member, purchase_history"
+          },
+          "label": {
+            "type": "string"
+          },
+          "detail": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "payment": {
+      "type": "object",
+      "properties": {
+        "restriction": {
+          "type": "string",
+          "enum": [
+            "none",
+            "own_card_only",
+            "unknown"
+          ]
+        },
+        "required_card": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "timing": {
+          "type": "string",
+          "enum": [
+            "at_entry_hold",
+            "after_win",
+            "at_store",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "proof_note": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "応募の証跡(レシート控え等)に関する注意"
+    },
+    "penalty_note": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "無効・キャンセル・次回除外などの注意"
+    },
+    "may_close_early": {
+      "type": "boolean",
+      "description": "受付を途中で打ち切る場合がある"
+    },
+    "exclusive_group": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "同じ値の抽選は1つしか応募できない(複数店舗同時実施など)"
+    },
+    "win_rate_ref": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "当選率の参考値(店舗の公表値ではない)",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "as_of": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "open",
+        "closed",
+        "unknown"
+      ]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "x",
+        "site",
+        "rss",
+        "user_report"
+      ]
+    },
+    "source_grade": {
+      "type": "string",
+      "enum": [
+        "official",
+        "store_notice",
+        "third_party"
+      ],
+      "description": "出典の種類(公式規約・店頭ポスターはofficial/store_notice)"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "first_seen_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_verified_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "review_needed": {
+      "type": "boolean"
+    }
   }
 }

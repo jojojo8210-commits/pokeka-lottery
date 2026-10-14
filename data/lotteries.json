@@ -2,21 +2,209 @@
   {
     "id": "sample-001",
     "shop_id": "example-shop-1",
-    "product": "(サンプル)拡張パック BOX",
-    "method": "online",
-    "entry_start": "2026-10-15T12:00:00+09:00",
-    "entry_end": "2026-10-17T23:59:00+09:00",
-    "result_date": "2026-10-19T18:00:00+09:00",
-    "purchase_period": null,
-    "price_yen": null,
+    "shop_name": "(サンプル)○○カードショップ△△店",
+    "chain_id": null,
+    "store_type": "local_shop",
+    "product": "(サンプル)新弾 BOX",
+    "method": "store",
+    "entry_channel": "x_repost",
+    "window_type": "fixed",
+    "entry_start": "2026-10-14T12:00:00+09:00",
+    "entry_end": "2026-10-15T23:59:00+09:00",
+    "result_date": "2026-10-16T18:00:00+09:00",
+    "announce": {
+      "channel": "dm",
+      "no_inquiry": false
+    },
+    "purchase_start": "2026-10-17T10:00:00+09:00",
+    "purchase_end": "2026-10-19T20:00:00+09:00",
+    "delivery": "store",
+    "shrink": "kept",
+    "price_yen": 5400,
     "limit_per_person": 1,
-    "conditions": { "membership": true, "app": false, "id_verification": false, "receipt": false, "note": null },
-    "status": "upcoming",
+    "entry_steps": [
+      {
+        "type": "follow",
+        "label": "店舗アカウントをフォロー"
+      },
+      {
+        "type": "repost",
+        "label": "対象の投稿をリポスト"
+      },
+      {
+        "type": "like",
+        "label": "対象の投稿にいいね"
+      }
+    ],
+    "requirements": [],
+    "payment": {
+      "restriction": "none",
+      "required_card": null,
+      "timing": "at_store"
+    },
+    "may_close_early": false,
+    "exclusive_group": null,
+    "status": "open",
     "source_type": "x",
-    "source_url": "https://example.com/sample",
+    "source_grade": "store_notice",
+    "source_url": "https://example.com/sample-001",
+    "first_seen_at": "2026-10-14T09:00:00+09:00",
+    "last_verified_at": "2026-10-14T09:30:00+09:00",
+    "confidence": 1.0,
+    "review_needed": false
+  },
+  {
+    "id": "sample-002",
+    "shop_id": "example-aeon",
+    "shop_name": "(サンプル)イオンスタイルオンライン",
+    "chain_id": "aeon",
+    "route_id": "aeon-style-online",
+    "store_type": "chain",
+    "product": "(サンプル)新弾 BOX",
+    "method": "online",
+    "entry_channel": "web_form",
+    "window_type": "fixed",
+    "entry_start": "2026-10-14T12:00:00+09:00",
+    "entry_end": "2026-10-20T23:59:00+09:00",
+    "result_date": "2026-10-22T18:00:00+09:00",
+    "announce": {
+      "channel": "email",
+      "no_inquiry": true
+    },
+    "delivery": "mail",
+    "shrink": "unknown",
+    "limit_per_person": 1,
+    "requirements": [
+      {
+        "key": "aeon_card",
+        "label": "イオンカード(注文者と同一名義)",
+        "detail": null
+      }
+    ],
+    "payment": {
+      "restriction": "own_card_only",
+      "required_card": "イオンカード(同一名義)",
+      "timing": "unknown"
+    },
+    "penalty_note": "1世帯1回まで。デビット・プリペイドでの決済、複数アカウントでの応募は無効。注文後のキャンセル・返品は不可",
+    "may_close_early": false,
+    "exclusive_group": null,
+    "status": "open",
+    "source_type": "site",
+    "source_grade": "official",
+    "source_url": "https://example.com/sample-002",
     "first_seen_at": "2026-10-14T09:00:00+09:00",
     "last_verified_at": null,
-    "confidence": 1.0,
+    "confidence": 0.9,
+    "review_needed": false
+  },
+  {
+    "id": "sample-003",
+    "shop_id": "example-bic",
+    "shop_name": "(サンプル)ビックカメラ○○店",
+    "chain_id": "biccamera",
+    "store_type": "chain",
+    "product": "(サンプル)新弾 BOX",
+    "method": "store",
+    "entry_channel": "in_store",
+    "window_type": "fixed",
+    "entry_start": "2026-10-14T10:00:00+09:00",
+    "entry_end": "2026-10-18T20:00:00+09:00",
+    "result_date": "2026-10-19T12:00:00+09:00",
+    "announce": {
+      "channel": "poster",
+      "no_inquiry": false
+    },
+    "purchase_start": "2026-10-20T10:00:00+09:00",
+    "purchase_end": "2026-10-22T20:00:00+09:00",
+    "delivery": "store",
+    "shrink": "removed",
+    "limit_per_person": 1,
+    "requirements": [
+      {
+        "key": "biccamera_card",
+        "label": "ビックカメラのポイントカード/公式アプリ(登録済)",
+        "detail": "対象カードは抽選ごとに異なる"
+      },
+      {
+        "key": "mynumber_card",
+        "label": "本人名義のマイナンバーカード",
+        "detail": null
+      },
+      {
+        "key": "purchase_history",
+        "label": "指定期間内の購入履歴",
+        "detail": "期間は告知で確認"
+      }
+    ],
+    "payment": {
+      "restriction": "unknown",
+      "required_card": null,
+      "timing": "at_store"
+    },
+    "proof_note": "レシートが抽選の控えと当選引換券を兼ねます。再発行できないので保管してください",
+    "may_close_early": true,
+    "exclusive_group": "sample-bic-group",
+    "status": "open",
+    "source_type": "x",
+    "source_grade": "third_party",
+    "source_url": "https://example.com/sample-003",
+    "first_seen_at": "2026-10-14T10:05:00+09:00",
+    "last_verified_at": null,
+    "confidence": 0.6,
     "review_needed": true
+  },
+  {
+    "id": "sample-004",
+    "shop_id": "example-yodo",
+    "shop_name": "(サンプル)ヨドバシ・ドット・コム",
+    "chain_id": "yodobashi",
+    "store_type": "chain",
+    "product": "(サンプル)新弾 BOX",
+    "method": "online",
+    "entry_channel": "web_form",
+    "window_type": "fixed",
+    "entry_start": "2026-10-16T10:00:00+09:00",
+    "entry_end": "2026-10-21T23:59:00+09:00",
+    "result_date": "2026-10-23T18:00:00+09:00",
+    "announce": {
+      "channel": "email",
+      "no_inquiry": false
+    },
+    "delivery": "mail",
+    "shrink": "kept",
+    "limit_per_person": 1,
+    "requirements": [
+      {
+        "key": "yodobashi_member",
+        "label": "ヨドバシ・ドット・コム会員(入会無料)",
+        "detail": null
+      },
+      {
+        "key": "purchase_history",
+        "label": "購入履歴",
+        "detail": "過去2年。ヨドバシ.comまたはポイント共通化済みの店舗購入"
+      }
+    ],
+    "payment": {
+      "restriction": "none",
+      "required_card": null,
+      "timing": "unknown"
+    },
+    "may_close_early": false,
+    "exclusive_group": null,
+    "win_rate_ref": {
+      "text": "約16.9%",
+      "source": "参考値(店舗の公表値ではない)",
+      "as_of": null
+    },
+    "status": "upcoming",
+    "source_type": "site",
+    "source_grade": "official",
+    "source_url": "https://example.com/sample-004",
+    "first_seen_at": "2026-10-14T08:00:00+09:00",
+    "last_verified_at": null,
+    "confidence": 0.8,
+    "review_needed": false
   }
 ]
