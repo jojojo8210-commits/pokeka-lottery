@@ -34,3 +34,12 @@
 - 変更したら必ず動作を確認してからコミットする。
 - 日本語でコメントとコミットメッセージを書く。
 - 無料枠に収まる構成を優先する(静的サイト、Cloudflare Pages、GitHub Actions)。
+
+## 応募条件の扱い(v2で追加)
+9. 応募条件・支払い条件は抽選ごとに変わる。chains.yamlの既定値より、その抽選の告知から取った値を優先する。
+10. 条件は公式規約・店頭ポスター・店舗の告知など一次情報で確認する。他サイトの記述は転記しない。
+11. 第三者の投稿が出典のものは source_grade を third_party にし、確認が取れるまで review_needed=true にする。
+12. 告知の本文が画像のみの場合は、画像から条件を読み取って構造化する。読み取れない項目は null にして推測で埋めない。
+13. requirements のkeyで、マイ設定にあるもの(mynumber_card, aeon_card, biccamera_card, yodobashi_member)は自動判定、それ以外は「要確認」として表示する。
+
+14. 応募条件の表示は requirements に一本化した(conditions は廃止)。データを変更すると GitHub Actions が scripts/validate.py で自動検証する。失敗したら直してから公開する。
