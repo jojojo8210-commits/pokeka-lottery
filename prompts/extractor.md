@@ -66,6 +66,8 @@
 | `ponta_card` | Pontaカード |
 | `seven_id` | 7iD |
 | `star_card` | スターカード |
+| `member_rank` | 店舗独自の会員ランク(例: プラチナ、ゴールド。ランク名と基準日は `detail` に) |
+| `newsletter` | メールマガジンの配信希望 |
 | `other` | 上記以外 |
 
 ## 支払い `payment`
