@@ -1,0 +1,9 @@
+{
+  "joshin-web-chusen": {
+    "url": "https://joshinweb.jp/toy/c_chusen.html",
+    "result": "failed",
+    "error": "PermissionError: robots.txt により取得が許可されていません",
+    "fail_count": 1,
+    "last_attempt_at": "2026-10-15T16:26:18+09:00"
+  }
+}
