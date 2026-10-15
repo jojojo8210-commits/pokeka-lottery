@@ -96,25 +96,33 @@ def norm(s: str) -> str:
 _robots_cache: dict = {}
 
 
-def robots_allows(url: str) -> bool:
+def robots_allows(url: str) -> tuple[bool, str]:
+    """robots.txt を確認する。戻り値は (許可されているか, 禁止の理由)。"""
     import requests
 
     p = urlparse(url)
     base = f"{p.scheme}://{p.netloc}"
-    rp = _robots_cache.get(base)
-    if rp is None:
+    cached = _robots_cache.get(base)
+    if cached is None:
         rp = urllib.robotparser.RobotFileParser()
+        note = ""
         r = requests.get(base + "/robots.txt", headers={"User-Agent": UA}, timeout=20)
         if r.status_code == 404:
             rp.parse([])
         elif r.status_code in (401, 403):
+            # robots.txt 自体が拒否された。安全側に倒して全面禁止として扱う(Python標準の挙動)
             rp.parse(["User-agent: *", "Disallow: /"])
+            note = f"robots.txt の取得が HTTP {r.status_code} で拒否されたため、全面禁止として扱いました(規則そのものによる禁止ではありません)"
         elif r.ok:
             rp.parse(r.text.splitlines())
         else:
             raise RuntimeError(f"robots.txt の取得に失敗 (HTTP {r.status_code})")
-        _robots_cache[base] = rp
-    return rp.can_fetch(UA, url)
+        cached = (rp, note)
+        _robots_cache[base] = cached
+    rp, note = cached
+    if rp.can_fetch(UA, url):
+        return True, ""
+    return False, note or f"robots.txt の規則により禁止されています (UA={UA.split('/')[0]}, パス={p.path or '/'})"
 
 
 def fix_encoding(r) -> None:
@@ -137,8 +145,9 @@ def fix_encoding(r) -> None:
 def fetch(url: str) -> str:
     import requests
 
-    if not robots_allows(url):
-        raise PermissionError("robots.txt により取得が許可されていません")
+    allowed, why = robots_allows(url)
+    if not allowed:
+        raise PermissionError(why)
     r = requests.get(url, headers={"User-Agent": UA, "Accept-Language": "ja,en;q=0.5"}, timeout=30)
     r.raise_for_status()
     fix_encoding(r)
