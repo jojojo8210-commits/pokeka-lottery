@@ -40,7 +40,12 @@ shops:
     store_type: chain
     chain_id: yodobashi
     # 確認
-      - id: joshin-web
+    prefecture: 全国
+    area: オンライン
+    priority: normal
+    other_sources: []
+    note: ""
+  - id: joshin-web
     name: Joshin webショップ
     x_handle: null
     store_type: chain
@@ -49,9 +54,4 @@ shops:
     area: オンライン
     priority: normal
     other_sources: [joshin-web-chusen]
-    note: ""
-    prefecture: 全国
-    area: オンライン
-    priority: normal
-    other_sources: []
     note: ""
