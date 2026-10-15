@@ -4,3 +4,7 @@ node_modules/
 .DS_Store
 dist/
 .wrangler/
+.cache/
+gold/
+__pycache__/
+*.pyc
