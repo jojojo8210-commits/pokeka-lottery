@@ -117,6 +117,23 @@ def robots_allows(url: str) -> bool:
     return rp.can_fetch(UA, url)
 
 
+def fix_encoding(r) -> None:
+    """日本語サイトの文字コードを正しく読む。Windows-31J など Shift_JIS 系は cp932 として読む(①②などの機種依存文字も含む)。"""
+    import codecs
+
+    enc = (r.encoding or "").lower().replace("_", "-")
+    if enc in ("windows-31j", "shift-jis", "sjis", "x-sjis", "ms932", "cp932", "shift-jisx0213"):
+        r.encoding = "cp932"
+        return
+    if not enc or enc == "iso-8859-1":
+        r.encoding = r.apparent_encoding or "utf-8"
+        return
+    try:
+        codecs.lookup(enc)
+    except LookupError:
+        r.encoding = r.apparent_encoding or "utf-8"
+
+
 def fetch(url: str) -> str:
     import requests
 
@@ -124,8 +141,7 @@ def fetch(url: str) -> str:
         raise PermissionError("robots.txt により取得が許可されていません")
     r = requests.get(url, headers={"User-Agent": UA, "Accept-Language": "ja,en;q=0.5"}, timeout=30)
     r.raise_for_status()
-    if r.encoding is None or r.encoding.lower() == "iso-8859-1":
-        r.encoding = r.apparent_encoding
+    fix_encoding(r)
     return r.text
 
 
@@ -621,6 +637,12 @@ def run(args, client=None) -> int:
             text = rss_to_text(raw) if src.get("type") == "rss" else html_to_text(raw, src["url"], src.get("selector"))
             if not text.strip():
                 raise RuntimeError("本文が空です(サイトの形式が変わった可能性)")
+            tf = src.get("text_from")
+            if tf:
+                i = text.find(tf)
+                if i < 0:
+                    raise RuntimeError(f"text_from '{tf}' が見つかりません(サイトの形式が変わった可能性)")
+                text = text[i:]
             text = text[:MAX_TEXT_CHARS]
         except Exception as e:  # noqa: BLE001
             msg = f"{type(e).__name__}: {e}"[:200]
