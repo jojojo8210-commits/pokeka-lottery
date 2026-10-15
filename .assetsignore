@@ -8,3 +8,15 @@ wrangler.jsonc
 node_modules
 .env
 .env.*
+config
+prompts
+state
+docs
+gold
+.cache
+requirements.txt
+data/chains.yaml
+data/shops.yaml
+data/schema.json
+__pycache__
+*.pyc
