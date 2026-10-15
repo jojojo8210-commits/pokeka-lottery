@@ -1,0 +1,41 @@
+{
+  "case_id": "case-001",
+  "note": "何を試すケースか(例: 購入期間が応募期間と別に書かれている、画像告知、排他あり)",
+  "now": "2026-10-15T10:00:00+09:00",
+  "source": {
+    "shop_id": "shops.yaml の id",
+    "shop_name": "店舗名",
+    "chain_id": null,
+    "store_type": "chain",
+    "source_grade": "store_notice",
+    "method_hint": "unknown",
+    "url": "https://告知のURL"
+  },
+  "input": {
+    "text": "告知文をここに貼る(画像のケースは text を省き、下の image だけにする)",
+    "image": null
+  },
+  "expected": {
+    "lotteries": [
+      {
+        "product": "商品名",
+        "method": "online",
+        "entry_channel": "web_form",
+        "window_type": "fixed",
+        "entry_start": "2026-10-20T10:00:00+09:00",
+        "entry_end": "2026-10-22T23:59:00+09:00",
+        "result_date": null,
+        "purchase_start": null,
+        "purchase_end": null,
+        "price_yen": null,
+        "limit_per_person": null,
+        "payment": { "restriction": "unknown" },
+        "shrink": "unknown",
+        "may_close_early": false,
+        "exclusive_group": null,
+        "requirements": [],
+        "entry_steps": []
+      }
+    ]
+  }
+}

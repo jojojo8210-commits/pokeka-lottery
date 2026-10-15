@@ -384,6 +384,24 @@ footer{padding:28px 0 48px;font-size:12px;color:var(--muted)}
     document.getElementById('sampleNotice').hidden = !sample;
   }
 
+  // 収集器が各情報源を最後に確認した時刻(data/freshness.json)。最も古いものを表示する(=すべて少なくともこの時刻には確認済み)
+  function setChecked(){
+    fetch('data/freshness.json', {cache: 'no-store'})
+      .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(f){
+        var oldest = null;
+        Object.keys(f).forEach(function(k){
+          var t = f[k] && ts(f[k].checked_at);
+          if (t && (oldest === null || t < oldest)) oldest = t;
+        });
+        if (oldest !== null){
+          var el = document.getElementById('updated');
+          el.textContent = (el.textContent ? el.textContent + ' / ' : '') + '最終確認 ' + fmt(oldest);
+        }
+      })
+      .catch(function(){});
+  }
+
   function bind(){
     document.querySelectorAll('.tab').forEach(function(btn){
       btn.addEventListener('click', function(){
@@ -411,7 +429,7 @@ footer{padding:28px 0 48px;font-size:12px;color:var(--muted)}
   function load(){
     fetch('data/lotteries.json', {cache: 'no-store'})
       .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function(data){ state.items = Array.isArray(data) ? data : []; setUpdated(); render(); })
+      .then(function(data){ state.items = Array.isArray(data) ? data : []; setUpdated(); render(); setChecked(); })
       .catch(function(){ state.error = true; render(); });
   }
 

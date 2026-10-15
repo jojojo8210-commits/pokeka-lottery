@@ -1,0 +1,27 @@
+# 収集元の台帳(レーン1: 静的ページ・RSS)
+#
+# enabled を true にする前に、必ず次を済ませること:
+#   1. 利用規約で自動取得が禁止されていないか確認 → tos_checked に確認日を記入
+#   2. https://ドメイン/robots.txt で対象URLが禁止されていないか確認 → robots_ok: true
+#   3. shop_id が data/shops.yaml に、chain_id が data/chains.yaml にあるか確認(個店は chain_id: null)
+# 上の2つが未記入だと、収集器はその情報源を実行しない。
+#
+# selector: ページ内の「抽選のお知らせ一覧」の部分だけを指す CSS セレクタ(任意)。
+#           広告や更新日時など、毎回変わる部分を除くと、無駄なAI呼び出しが減る。
+# source_grade: official(公式規約など) / store_notice(店舗の告知) / third_party(第三者の報道)
+sources:
+  - id: example-chain-news
+    enabled: false
+    type: html                 # html | rss
+    url: ""                    # 例: 店舗公式の「お知らせ」一覧ページのURL
+    selector: null
+    shop_id: ""                # data/shops.yaml の id
+    shop_name: ""
+    chain_id: null             # data/chains.yaml の id(個店は null)
+    store_type: chain          # chain | local_shop | maker_campaign
+    route_id: null
+    method_hint: unknown       # online | store | unknown(ヒント。抽出の判断材料)
+    source_grade: store_notice
+    tos_checked: null          # 例: "2026-10-16"
+    robots_ok: null            # true にしてよいのは robots.txt を確認した後だけ
+    note: ""

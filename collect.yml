@@ -1,0 +1,103 @@
+name: collect
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # 毎日 07:00 JST
+    - cron: "0 9 * * *"    # 毎日 18:00 JST
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "特定の情報源IDだけ実行(空なら全部)"
+        required: false
+      force:
+        description: "変化がなくても再抽出する(true / false)"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: 抽出キャッシュの復元(同じ内容を何度もAIに出さないため)
+        uses: actions/cache@v4
+        with:
+          path: .cache/extract
+          key: extract-${{ github.run_id }}
+          restore-keys: extract-
+
+      - name: 収集
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SRC: ${{ inputs.source }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          args=()
+          if [ -n "$SRC" ]; then args+=(--source "$SRC"); fi
+          if [ "$FORCE" = "true" ]; then args+=(--force); fi
+          python scripts/collect.py "${args[@]}"
+          if [ -f .cache/report.md ]; then cat .cache/report.md >> "$GITHUB_STEP_SUMMARY"; fi
+
+      - name: 検証
+        run: python scripts/validate.py
+
+      - name: 鮮度の記録を main に反映(日時の記録だけなので承認不要)
+        run: |
+          git config user.name "pokeka-lottery-bot"
+          git config user.email "bot@users.noreply.github.com"
+          if [ -n "$(git status --porcelain -- data/freshness.json)" ]; then
+            git add data/freshness.json
+            git commit -m "chore: 鮮度の記録を更新 [skip ci]"
+            git push origin HEAD:main
+          fi
+
+      - name: データの変更を PR にする(承認は PR のマージ)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- data/lotteries.json state/hashes.json)" ]; then
+            echo "データの変更なし"
+            exit 0
+          fi
+          git checkout -B collect/auto
+          git add data/lotteries.json state/hashes.json
+          git commit -m "collect: 抽選データの更新案"
+          git push -f origin collect/auto
+          if [ -z "$(gh pr list --head collect/auto --state open --json number --jq '.[0].number')" ]; then
+            gh pr create --base main --head collect/auto \
+              --title "抽選データの更新案 ($(date -u +%F))" \
+              --body-file .cache/report.md
+          else
+            gh pr edit collect/auto --body-file .cache/report.md
+          fi
+
+      - name: 取得失敗が続く情報源を Issue で通知(Watchdog)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .cache
+          python scripts/collect.py --watchdog > .cache/watchdog.txt || true
+          if [ -s .cache/watchdog.txt ]; then
+            if [ -z "$(gh issue list --state open --search '収集失敗 in:title' --json number --jq '.[0].number')" ]; then
+              gh issue create --title "収集失敗: 情報源の取得が続けて失敗しています" --body-file .cache/watchdog.txt
+            fi
+          fi
