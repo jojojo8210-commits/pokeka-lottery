@@ -668,6 +668,10 @@ def run(args, client=None) -> int:
                 report[act].append(c)
         state[sid] = {"hash": h, "updated_at": now.isoformat()}
 
+    if active == 0:
+        log("実行した情報源がありません(config/sources.yaml の enabled・tos_checked・robots_ok を確認)。ファイルは書き換えません")
+        write_report(report, now, True)
+        return 0
     if not args.dry_run:
         save_json(LOTTERIES_PATH, lotteries)
         save_json(STATE_PATH, state)
