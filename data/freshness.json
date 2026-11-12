@@ -3,7 +3,7 @@
     "url": "https://joshinweb.jp/toy/c_chusen.html",
     "result": "failed",
     "error": "PermissionError: robots.txt の取得が HTTP 403 で拒否されたため、全面禁止として扱いました(規則そのものによる禁止ではありません)",
-    "fail_count": 57,
-    "last_attempt_at": "2026-11-12T07:42:38+09:00"
+    "fail_count": 58,
+    "last_attempt_at": "2026-11-12T18:49:11+09:00"
   }
 }
